@@ -1,0 +1,57 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+
+    <!-- Cuerpo de Papá Noel -->
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M100,150c-25,0 -45,-20 -45,-45s20,-45 45,-45 45,20 45,45 -20,45 -45,45z" />
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M100,90c-20,0 -35,-15 -35,-35s15,-35 35,-35 35,15 35,35 -15,35 -35,35z" />
+
+    <!-- Barba -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M85,80c-10,0 -10,-10 -10,-10s0,-10 10,-10 10,10 10,10 -10,10 -10,10z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M115,80c-10,0 -10,-10 -10,-10s0,-10 10,-10 10,10 10,10 -10,10 -10,10z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M100,90c-15,0 -15,-15 -15,-15s0,-15 15,-15 15,15 15,15 -15,15 -15,15z" />
+
+    <!-- Gafas -->
+    <path
+        android:fillColor="#0FF000"
+        android:pathData="M90,60c-5,0 -5,-5 -5,-5s0,-5 5,-5 5,5 5,5 -5,5 -5,5z" />
+    <path
+        android:fillColor="#0FF000"
+        android:pathData="M110,60c-5,0 -5,-5 -5,-5s0,-5 5,-5 5,5 5,5 -5,5 -5,5z" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M95,60h10v2h-10z" />
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M85,70h30v1h-20z" />
+
+    <!-- Gorro -->
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M80,30h40v10h-40z" />
+    <path
+        android:fillColor="#FF0000"
+        android:pathData="M70,40h60v10h-60z" />
+
+    <!-- Oro BOTONES -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M100,120c-5,0 -5,-5 -5,-5s0,-5 5,-5 5,5 5,5 -5,5 -5,5z" />
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M100,140c-5,0 -5,-5 -5,-5s0,-5 5,-5 5,5 5,5 -5,5 -5,5z" />
+
+</vector>

@@ -1,6 +1,7 @@
 package com.example.mygamecristmasrts;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -10,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 //Ok okokokokok
@@ -18,10 +23,15 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout layoutContainer;
     private TextView tvPuntos;
     private Button btnCrear;
+    private Button btnVerPuntuaciones;
 
     private int puntos = 0;
     private int vidas = 5;
     private Handler handler = new Handler(); // manejador para programar tareas como la creacion y elimminacion de personajes de forma repetitiva
+
+
+    private miDbHelper dbHelper;
+    //okkkk
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
         layoutContainer = findViewById(R.id.layoutContainer);
         tvPuntos = findViewById(R.id.tvPuntos);
         btnCrear = findViewById(R.id.buttonIniciar);
+        btnVerPuntuaciones = findViewById(R.id.buttonVerPuntuaciones);
+        dbHelper = new miDbHelper(this);
+
+
         mostrarFondoInicial();
 
 
@@ -39,10 +53,21 @@ public class MainActivity extends AppCompatActivity {
         btnCrear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 iniciarJuego();
             }
         });
+
+        // Acción al hacer clic en el botón de ver puntuaciones
+        btnVerPuntuaciones.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MejoresPuntuaciones.class);
+                startActivity(intent);
+            }
+        });
     }
+
 
     private void iniciarJuego() {
         btnCrear.setVisibility(View.GONE); // Ocultar el botón de iniciar
@@ -117,20 +142,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mostrarGameOver() {
-        tvPuntos.setText("Game Over-Puntos: " + puntos);
+        if (vidas <= 0) {
+            tvPuntos.setText("Game Over-Puntos: " + puntos);
 
-       // mostrarFondoInicial();
+            // Guardar la puntuación en la base de datos
+            String fechaActual = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+            dbHelper.addPuntuacion(puntos, fechaActual);
 
-        btnCrear.setText("RESET");
-        btnCrear.setVisibility(View.VISIBLE);
-        btnCrear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                reiniciarJuego();
-         //       layoutContainer.removeAllViews();
-            }
-        });
+            btnCrear.setText("RESET");
+            btnCrear.setVisibility(View.VISIBLE);
+            btnCrear.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reiniciarJuego();
+                }
+            });
+        }
     }
+
 
     private void reiniciarJuego() {
         puntos = 0;
@@ -176,7 +205,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 }

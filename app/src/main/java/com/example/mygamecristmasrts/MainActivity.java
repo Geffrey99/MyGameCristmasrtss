@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,13 +26,18 @@ public class MainActivity extends AppCompatActivity {
     private Button btnCrear;
     private Button btnVerPuntuaciones;
 
+    private ConstraintLayout layoutBotones;
+
     private int puntos = 0;
-    private int vidas = 5;
+   // private int vidas = 5;
     private Handler handler = new Handler(); // manejador para programar tareas como la creacion y elimminacion de personajes de forma repetitiva
 
 
     private miDbHelper dbHelper;
+    private boolean gameOverShown = false; //// Variable para asegurarme de que mostrarGameOver() solo se llame una vez
     //okkkk
+
+    private int personajeNoAtrapados = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         tvPuntos = findViewById(R.id.tvPuntos);
         btnCrear = findViewById(R.id.buttonIniciar);
         btnVerPuntuaciones = findViewById(R.id.buttonVerPuntuaciones);
+
+        layoutBotones = findViewById(R.id.constraintLayout);
         dbHelper = new miDbHelper(this);
 
 
@@ -71,20 +79,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void iniciarJuego() {
         btnCrear.setVisibility(View.GONE); // Ocultar el botón de iniciar
-        tvPuntos.setText("Score: " + puntos);
+       layoutBotones.setVisibility(View.GONE);
 
+        tvPuntos.setText("Empieza a ganar : " + puntos);
+        gameOverShown = false; // Reiniciar la variable cuando se inicia un nuevo juego
         // Eliminar personaje del fondo
         layoutContainer.removeAllViews();
+
+
+        personajeNoAtrapados =0;
 
         // Crear personajes cada x tiempo
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (vidas > 0) {
+                if (!gameOverShown) {
                     crearPersonaje();
-                    handler.postDelayed(this, 1000); // Crear un personaje cada X" segundos
-                } else {
-                    mostrarGameOver();
+                    handler.postDelayed(this, 1000); // Crear un personaje cada X segundos
                 }
             }
         }, 1000);
@@ -118,10 +129,16 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if (layoutContainer.indexOfChild(personaje) != -1) {
                             layoutContainer.removeView(personaje);
-                            vidas--;
-                            if (vidas <= 0) {
-                                mostrarGameOver();
-                            }
+
+                 personajeNoAtrapados++;
+                 if (personajeNoAtrapados >= 3) {
+                     mostrarGameOver();
+                 }
+
+                  //          vidas--;
+                    //        if (vidas <= 0) {
+                               // mostrarGameOver();
+                      //      }
                         }
                     }
                 };
@@ -134,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                         handler.removeCallbacks(eliminarPersonaje);
                         layoutContainer.removeView(personaje);
                         puntos += 10;
+                        personajeNoAtrapados = 0;
                         tvPuntos.setText("Puntos: " + puntos);
                     }
                 });
@@ -142,8 +160,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mostrarGameOver() {
-        if (vidas <= 0) {
-            tvPuntos.setText("Game Over-Puntos: " + puntos);
+       // if (vidas <= 0) {
+         if (!gameOverShown) {
+             gameOverShown = true;  //ha sido llamado entonces
+            tvPuntos.setText("GAME OVER--Puntos Obtenidos: " + puntos);
 
             // Guardar la puntuación en la base de datos
             String fechaActual = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -151,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
 
             btnCrear.setText("RESET");
             btnCrear.setVisibility(View.VISIBLE);
+            layoutBotones.setVisibility(View.VISIBLE);
+            mostrarFondoInicial();
             btnCrear.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -163,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void reiniciarJuego() {
         puntos = 0;
-        vidas = 5;
+      //  vidas = 5;
         layoutContainer.removeAllViews();
         iniciarJuego();
     }

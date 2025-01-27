@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.mygamecristmasrts.miDbHelper;
+
 public class MejoresPuntuaciones extends AppCompatActivity {
 
     private miDbHelper dbHelper;
@@ -24,7 +24,9 @@ public class MejoresPuntuaciones extends AppCompatActivity {
         textViewListaPuntuaciones = findViewById(R.id.textViewListaPuntuaciones);
         Button buttonInicio = findViewById(R.id.buttonInicio);
 
-        mostrarTodasLasPartidas();
+        //mostrarTodasLasPartidas();
+
+        mostrarMejoresPuntuaciones();
 
         buttonInicio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,8 +37,8 @@ public class MejoresPuntuaciones extends AppCompatActivity {
         });
     }
 
-    private void mostrarTodasLasPartidas() {
-        Cursor cursor = dbHelper.getTodasLasPartidas();
+    private void mostrarMejoresPuntuaciones() {
+        Cursor cursor = dbHelper.getMejoresPuntuaciones();
         StringBuilder stringBuilder = new StringBuilder();
         if (cursor.moveToFirst()) {
             do {
@@ -50,3 +52,20 @@ public class MejoresPuntuaciones extends AppCompatActivity {
     }
 }
 
+
+    //PERFECTTTT ✔️
+   /* private void mostrarTodasLasPartidas() {
+        Cursor cursor = dbHelper.getTodasLasPartidas();
+        StringBuilder stringBuilder = new StringBuilder();
+        if (cursor.moveToFirst()) {
+            do {
+                @SuppressLint("Range") int puntos = cursor.getInt(cursor.getColumnIndex("puntos"));
+                @SuppressLint("Range") String fecha = cursor.getString(cursor.getColumnIndex("fecha"));
+                stringBuilder.append("Puntos: ").append(puntos).append(", Fecha: ").append(fecha).append("\n");
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        textViewListaPuntuaciones.setText(stringBuilder.toString());
+    }
+
+    */
